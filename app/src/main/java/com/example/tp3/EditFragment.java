@@ -91,7 +91,6 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 showEditDialog(position);
-
             }
         });
         return view;
