@@ -32,9 +32,15 @@
         android:inputType="number"/>
 
     <Button
-        android:id="@+id/button_update"
+        android:id="@+id/bouton_update"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Update"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Il faut rafraichir le tab pour voir les changements"
+        />
 
 </LinearLayout>

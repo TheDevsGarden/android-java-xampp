@@ -14,7 +14,6 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -90,7 +89,7 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                showEditDialog(position);
+                montrerEditDialog(position);
             }
         });
         return view;
@@ -162,17 +161,17 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
         queue.add(request);
     }
 
-    private void showEditDialog(int position) {
+    private void montrerEditDialog(int position) {
         AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
         LayoutInflater inflater = getActivity().getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
+        View dialogView = inflater.inflate(R.layout.popup_modifier_item, null);
         dialogBuilder.setView(dialogView);
 
         EditText editNom = dialogView.findViewById(R.id.edit_nom);
         EditText editDescription = dialogView.findViewById(R.id.edit_description);
         EditText editPrix = dialogView.findViewById(R.id.edit_prix);
         EditText editQuantite = dialogView.findViewById(R.id.edit_quantite);
-        Button buttonUpdate = dialogView.findViewById(R.id.button_update);
+        Button buttonUpdate = dialogView.findViewById(R.id.bouton_update);
 
         editNom.setText(listeItems.get(position));
         editDescription.setText(listeDesc.get(position));
