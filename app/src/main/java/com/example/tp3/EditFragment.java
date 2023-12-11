@@ -47,6 +47,9 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
 
     ListView listView;
     ArrayList<String> listeItems = new ArrayList<>();
+    ArrayList<String> listeDesc = new ArrayList<>();
+    ArrayList<String> listePrix = new ArrayList<>();
+    ArrayList<String> listeQte = new ArrayList<>();
     ArrayList<Integer> ListeIdItems = new ArrayList<>();
 
     String url = "http://10.0.2.2:80/afficherItems.php";
@@ -99,11 +102,17 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String item = jsonObject.getString("nom");
+                        String description = jsonObject.getString("description");
+                        String prix = jsonObject.getString("prix");
+                        String quantite = jsonObject.getString("quantité");
                         int id = jsonObject.getInt("idArticle");
                         listeItems.add(item);
+                        listeDesc.add(description);
+                        listePrix.add(prix);
+                        listeQte.add(quantite);
                         ListeIdItems.add(id);
                     }
-                    ListAdapter adapter = new ListAdapter(getActivity(), listeItems, ListeIdItems, EditFragment.this);
+                    ListAdapter adapter = new ListAdapter(getActivity(), listeItems, listeDesc, listePrix, listeQte, ListeIdItems, EditFragment.this);
                     listView.setAdapter(adapter);
                 } catch (JSONException e) {
                     Log.i("EDITFRAGMENT", "EROR LINE 109");
