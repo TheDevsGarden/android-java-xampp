@@ -37,8 +37,8 @@ public class ListAdapter extends ArrayAdapter<String> {
         View rowView = inflater.inflate(R.layout.list_item, parent, false);
         TextView itemName = rowView.findViewById(R.id.nom_item);
         TextView itemDescription = rowView.findViewById(R.id.item_description);
-        TextView itemPrice = rowView.findViewById(R.id.item_price);
-        TextView itemQuantity = rowView.findViewById(R.id.item_quantity);
+        TextView itemPrice = rowView.findViewById(R.id.item_prix);
+        TextView itemQuantity = rowView.findViewById(R.id.item_quantite);
         ImageView deleteIcon = rowView.findViewById(R.id.delete_icon);
         itemName.setText(items.get(position));
         itemDescription.setText(listeDesc.get(position));

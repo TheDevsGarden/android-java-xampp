@@ -1,5 +1,6 @@
 package com.example.tp3;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 
 import androidx.annotation.Nullable;
@@ -10,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -54,6 +57,8 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
 
     String url = "http://10.0.2.2:80/afficherItems.php";
     String deleteUrl = "http://10.0.2.2:80/deleteItem.php";
+    String updateUrl = "http://10.0.2.2:80/updateItem.php";
+
 
     public EditFragment() {}
 
@@ -85,7 +90,8 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                deleteItem(ListeIdItems.get(position));
+                showEditDialog(position);
+
             }
         });
         return view;
@@ -156,6 +162,66 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(request);
     }
+
+    private void showEditDialog(int position) {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getActivity());
+        LayoutInflater inflater = getActivity().getLayoutInflater();
+        View dialogView = inflater.inflate(R.layout.dialog_edit_item, null);
+        dialogBuilder.setView(dialogView);
+
+        EditText editNom = dialogView.findViewById(R.id.edit_nom);
+        EditText editDescription = dialogView.findViewById(R.id.edit_description);
+        EditText editPrix = dialogView.findViewById(R.id.edit_prix);
+        EditText editQuantite = dialogView.findViewById(R.id.edit_quantite);
+        Button buttonUpdate = dialogView.findViewById(R.id.button_update);
+
+        editNom.setText(listeItems.get(position));
+        editDescription.setText(listeDesc.get(position));
+        editPrix.setText(listePrix.get(position));
+        editQuantite.setText(listeQte.get(position));
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        buttonUpdate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateItem(ListeIdItems.get(position), editNom.getText().toString(), editDescription.getText().toString(), editPrix.getText().toString(), editQuantite.getText().toString());
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    private void updateItem(int id, String nom, String description, String prix, String quantite) {
+
+        StringRequest request = new StringRequest(Request.Method.POST, updateUrl, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+                fetchItems();
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.i("EDITFRAGMENT", "ERREUR LIGNE 204");
+            }
+        }) {
+            @Nullable
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id", String.valueOf(id));
+                params.put("nom", nom);
+                params.put("description", description);
+                params.put("prix", prix);
+                params.put("quantite", quantite);
+                return params;
+            }
+        };
+
+        RequestQueue queue = Volley.newRequestQueue(getActivity());
+        queue.add(request);
+    }
+
     @Override
     public void onDeleteItem(int id) {
         deleteItem(id);
