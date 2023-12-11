@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -47,15 +46,13 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
     private String mParam2;
 
     ListView listView;
-    ArrayList<String> itemsList = new ArrayList<>();
-    ArrayList<Integer> itemIdList = new ArrayList<>();
+    ArrayList<String> listeItems = new ArrayList<>();
+    ArrayList<Integer> ListeIdItems = new ArrayList<>();
 
     String url = "http://10.0.2.2:80/afficherItems.php";
     String deleteUrl = "http://10.0.2.2:80/deleteItem.php";
 
-    public EditFragment() {
-        // Required empty public constructor
-    }
+    public EditFragment() {}
 
     /**
      * Use this factory method to create a new instance of
@@ -85,16 +82,15 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                deleteItem(itemIdList.get(position));
+                deleteItem(ListeIdItems.get(position));
             }
         });
-
         return view;
     }
 
     private void fetchItems() {
-        itemsList.clear();
-        itemIdList.clear();
+        listeItems.clear();
+        ListeIdItems.clear();
         StringRequest request = new StringRequest(Request.Method.GET, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
@@ -104,14 +100,13 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         String item = jsonObject.getString("nom");
                         int id = jsonObject.getInt("idArticle");
-                        itemsList.add(item);
-                        itemIdList.add(id);
+                        listeItems.add(item);
+                        ListeIdItems.add(id);
                     }
-                    ListAdapter adapter = new ListAdapter(getActivity(), itemsList, itemIdList, EditFragment.this);
+                    ListAdapter adapter = new ListAdapter(getActivity(), listeItems, ListeIdItems, EditFragment.this);
                     listView.setAdapter(adapter);
                 } catch (JSONException e) {
                     Log.i("EDITFRAGMENT", "EROR LINE 109");
-
                     e.printStackTrace();
                 }
             }
@@ -132,14 +127,12 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
             @Override
             public void onResponse(String response) {
                 Log.i("EDITFRAGMENT", "ONRESPNSE OK");
-                Toast.makeText(getActivity(), response, Toast.LENGTH_SHORT).show();
                 fetchItems();
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.i("EDITFRAGMENT", "ONRESPNSE NOT OK, ERROR");
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }) {
             @Nullable
@@ -150,13 +143,10 @@ public class EditFragment extends Fragment implements ListAdapter.DeleteItemCall
                 Log.i("EDITFRAGMENT", "Request OK");
                 return params;
             }
-
         };
-
         RequestQueue queue = Volley.newRequestQueue(getActivity());
         queue.add(request);
     }
-
     @Override
     public void onDeleteItem(int id) {
         deleteItem(id);
