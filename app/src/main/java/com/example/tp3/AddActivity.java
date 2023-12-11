@@ -34,15 +34,13 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.fragment_add);
 
         nom = (EditText) findViewById(R.id.nom);
         description = (EditText) findViewById(R.id.description);
         prix = (EditText) findViewById(R.id.prix);
         qty = (EditText) findViewById(R.id.qty);
 
-        radio_ajouter = (RadioButton) findViewById(R.id.radio_ajouter);
-        radio_modifier = (RadioButton) findViewById(R.id.radio_modifier);
         btn_submit = (Button) findViewById(R.id.btn_sumbmit);
 
         btn_submit.setOnClickListener(new View.OnClickListener() {
